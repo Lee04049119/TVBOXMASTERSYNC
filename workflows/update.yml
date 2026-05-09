@@ -1,0 +1,30 @@
+name: Update IPTV Playlist
+
+on:
+  schedule:
+    - cron: "0 0 * * *"   # daily UTC
+  workflow_dispatch:
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Download latest my.m3u
+        run: |
+          mkdir -p streams
+          curl -L "https://raw.githubusercontent.com/iptv-org/iptv/master/streams/my.m3u" -o streams/my.m3u
+
+      - name: Commit changes
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+
+          git add streams/my.m3u
+
+          git diff --cached --quiet || git commit -m "Auto update my.m3u"
+
+          git push
