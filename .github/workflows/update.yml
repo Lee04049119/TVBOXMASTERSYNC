@@ -8,10 +8,10 @@ on:
 permissions:
   contents: write
 
-jobs:
-  update:
-    runs-on: ubuntu-latest
-      steps:
+jobs: 
+ update:
+  runs-on: ubuntu-latest
+  steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
