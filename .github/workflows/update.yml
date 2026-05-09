@@ -12,14 +12,17 @@ jobs:
   update:
     runs-on: ubuntu-latest
 
-    steps:
+      steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Download latest my.m3u
+      - name: Download latest playlists
         run: |
           mkdir -p streams
+
           curl -L "https://raw.githubusercontent.com/iptv-org/iptv/master/streams/my.m3u" -o streams/my.m3u
+
+          curl -L "https://raw.githubusercontent.com/iptv-org/iptv/master/streams/ae.m3u" -o streams/ae.m3u
 
       - name: Commit changes
         run: |
@@ -27,8 +30,9 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
           git add streams/my.m3u
+          git add streams/ae.m3u
 
-          git diff --cached --quiet || git commit -m "Auto update my.m3u"
+          git diff --cached --quiet || git commit -m "Auto update IPTV playlists"
 
       - name: Push changes
         run: git push
