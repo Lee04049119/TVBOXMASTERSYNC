@@ -30,6 +30,7 @@ jobs:
             # Custom folder names
             if [ "$group" = "my" ]; then group="Malaysia"; fi
             if [ "$group" = "ae" ]; then group="UAE"; fi
+            if [ "$group" = "zhuyutvdrama" ]; then group="逐玉"; fi
 
             echo "" >> index.m3u
 
