@@ -152,3 +152,5 @@ http://103.58.160.157:8278/720-CINEMAWORLD/playlist.m3u8
 
 #EXTINF:-1 tvg-id="逐玉EP1" group-title="逐玉",逐玉
 https://v13.wsyzym3u8.com/202603/06/NkZt7KBvMU27/video/index.m3u8
+#EXTINF:-1 tvg-id="逐玉EP2" group-title="逐玉",逐玉2
+https://v13.wsyzym3u8.com/202603/06/P6NVZhHUP627/video/index.m3u8
