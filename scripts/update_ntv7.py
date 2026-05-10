@@ -1,8 +1,8 @@
 import os
 from playwright.sync_api import sync_playwright
 
-EMAIL = os.getenv("TONTON_EMAIL")
-PASSWORD = os.getenv("TONTON_PASSWORD")
+EMAIL = "jianbiao0404@gmail.com"
+PASSWORD = "biao9119"
 
 TARGET = "https://watch.tonton.com.my/live/ntv7"
 
@@ -88,12 +88,12 @@ with sync_playwright() as p:
     print("Entering credentials...")
 
     popup.wait_for_selector(
-        'input[type="email"]',
+        'input[type="text"]',
         timeout=30000
     )
 
     popup.fill(
-        'input[type="email"]',
+        'input[type="text"]',
         EMAIL
     )
 
