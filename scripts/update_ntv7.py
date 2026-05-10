@@ -107,10 +107,27 @@ with sync_playwright() as p:
     # ============================================
     print("Submitting login...")
 
-    popup.click('button[type="submit"]')
+    submit_btn = popup.locator('#submitBtn')
 
-    # Wait login processing
-    popup.wait_for_timeout(10000)
+  
+    # Get button position
+    box = submit_btn.bounding_box()
+
+    if box:
+        # Move mouse like human
+        popup.mouse.move(
+            box["x"] + box["width"] / 2,
+            box["y"] + box["height"] / 2,
+            steps=20
+        )
+
+        popup.wait_for_timeout(500)
+
+    # Click submit button
+    submit_btn.click()
+
+    
+
 
     # ============================================
     # Close popup if still open
