@@ -21,15 +21,36 @@ jobs:
 
       - name: Generate index.m3u
         run: |
-          mkdir -p output
-
           echo "#EXTM3U" > index.m3u
 
           for file in streams/*.m3u; do
+
+            group=$(basename "$file" .m3u)
+
+            # Custom folder names
+            if [ "$group" = "my" ]; then group="Malaysia"; fi
+            if [ "$group" = "ae" ]; then group="UAE"; fi
+
             echo "" >> index.m3u
 
-            # Skip first line (#EXTM3U) from each file
-            tail -n +2 "$file" >> index.m3u
+            awk -v grp="$group" '
+            /^#EXTINF/ {
+
+                # remove old group-title if exists
+                gsub(/group-title="[^"]*"/, "")
+
+                # add new group-title
+                sub(/,/, " group-title=\"" grp "\",", $0)
+
+                print
+                next
+            }
+
+            {
+                print
+            }
+            ' "$file" | tail -n +2 >> index.m3u
+
           done
 
       - name: Commit updated index.m3u
