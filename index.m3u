@@ -150,5 +150,5 @@ https://vodcdn.bamboo-cloud.com/livehls/6901607706304423c1685213/master.m3u8
 #EXTINF:-1 tvg-id="CinemaWorld.my@SD" group-title="Malaysia",CinemaWorld (720p)
 http://103.58.160.157:8278/720-CINEMAWORLD/playlist.m3u8
 
-#EXTINF:-1 tvg-id="逐玉EP1" group-title="zhuyutvdrama",逐玉
+#EXTINF:-1 tvg-id="逐玉EP1" group-title="逐玉",逐玉
 https://v13.wsyzym3u8.com/202603/06/NkZt7KBvMU27/video/index.m3u8
