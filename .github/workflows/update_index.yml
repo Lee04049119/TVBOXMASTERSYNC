@@ -1,0 +1,44 @@
+name: Update IPTV Index
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'streams/*.m3u'
+  schedule:
+    - cron: '0 0 * * *'
+
+permissions:
+  contents: write
+
+jobs:
+  build-index:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Generate index.m3u
+        run: |
+          mkdir -p output
+
+          echo "#EXTM3U" > index.m3u
+
+          for file in streams/*.m3u; do
+            echo "" >> index.m3u
+
+            # Skip first line (#EXTM3U) from each file
+            tail -n +2 "$file" >> index.m3u
+          done
+
+      - name: Commit updated index.m3u
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add index.m3u
+
+          git diff --cached --quiet || git commit -m "Auto update index.m3u"
+
+          git push
