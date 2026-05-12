@@ -1,1 +1,46 @@
+name: Update NTV7 M3U
 
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 */6 * * *"
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install Python packages
+        run: |
+          pip install requests beautifulsoup4 pandas playwright
+
+      - name: Install Chromium
+        run: |
+          playwright install chromium
+          playwright install-deps
+
+      - name: Run script
+        env:
+          TONTON_EMAIL: ${{ secrets.TONTON_EMAIL }}
+          TONTON_PASSWORD: ${{ secrets.TONTON_PASSWORD }}
+        run: |
+          python ntv7.py
+
+      - name: Commit updated m3u
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+
+          git add streams/ntv7.m3u
+
+          git commit -m "Update ntv7.m3u" || echo "No changes"
+
+          git push
