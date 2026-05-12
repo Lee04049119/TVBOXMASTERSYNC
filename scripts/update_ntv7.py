@@ -156,7 +156,7 @@ with sync_playwright() as p:
     print("Waiting stream network requests...")
 
     # Allow video player to initialize
-    page.wait_for_timeout(20000)
+    page.wait_for_timeout(80000)
 
    
 # =====================================================
