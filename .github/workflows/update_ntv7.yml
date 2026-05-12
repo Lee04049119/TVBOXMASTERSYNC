@@ -1,46 +1,124 @@
-name: Update NTV7 M3U
+name: Update NTV7 Stream
+
+permissions:
+  contents: write
 
 on:
   workflow_dispatch:
+
   schedule:
-    - cron: "0 */6 * * *"
+    - cron: '0 0 * * *'
 
 jobs:
-  update:
+  update-stream:
+
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
+
+      # ============================================
+      # CHECKOUT REPOSITORY
+      # ============================================
+
+      - name: Checkout repository
         uses: actions/checkout@v4
+
+      # ============================================
+      # SETUP PYTHON
+      # ============================================
 
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
 
-      - name: Install Python packages
-        run: |
-          pip install requests beautifulsoup4 pandas playwright
+      # ============================================
+      # INSTALL CHROMIUM
+      # ============================================
 
-      - name: Install Chromium
+      - name: Install Chromium + Chromedriver
         run: |
-          playwright install chromium
-          playwright install-deps
+          sudo apt-get update
 
-      - name: Run script
+          sudo apt-get install -y \
+            chromium-browser \
+            chromium-chromedriver \
+            wget \
+            curl \
+            unzip
+
+          echo "CHROME_BIN=$(which chromium-browser)" >> $GITHUB_ENV
+          echo "CHROMEDRIVER_PATH=$(which chromedriver)" >> $GITHUB_ENV
+
+          echo "========== VERSION =========="
+          chromium-browser --version || true
+          chromedriver --version || true
+          echo "============================="
+
+      # ============================================
+      # INSTALL PYTHON PACKAGES
+      # ============================================
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install selenium webdriver-manager
+
+      # ============================================
+      # CREATE STREAMS FOLDER
+      # ============================================
+
+      - name: Create streams folder
+        run: |
+          mkdir -p streams
+
+      # ============================================
+      # RUN UPDATER
+      # ============================================
+
+      - name: Run updater
         env:
           TONTON_EMAIL: ${{ secrets.TONTON_EMAIL }}
           TONTON_PASSWORD: ${{ secrets.TONTON_PASSWORD }}
+
+          CHROME_BIN: ${{ env.CHROME_BIN }}
+          CHROMEDRIVER_PATH: ${{ env.CHROMEDRIVER_PATH }}
+
         run: |
           python scripts/update_ntv7.py
 
-      - name: Commit updated m3u
+      # ============================================
+      # SHOW GENERATED FILE
+      # ============================================
+
+      - name: Show generated M3U
         run: |
-          git config user.name "github-actions"
-          git config user.email "github-actions@github.com"
+          echo "========== ntv7.m3u =========="
+          cat streams/ntv7.m3u || true
+          echo "=============================="
+
+      # ============================================
+      # COMMIT CHANGES
+      # ============================================
+
+      - name: Commit changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
           git add streams/ntv7.m3u
 
-          git commit -m "Update ntv7.m3u" || echo "No changes"
+          git diff --cached --quiet || \
+          git commit -m "Update NTV7 stream"
 
           git push
+
+      # ============================================
+      # UPLOAD ARTIFACT
+      # ============================================
+
+      - name: Upload M3U artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ntv7-m3u
+          path: streams/ntv7.m3u
