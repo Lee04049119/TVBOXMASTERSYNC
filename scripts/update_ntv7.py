@@ -12,20 +12,31 @@ found = None
 with sync_playwright() as p:
 
     browser = p.chromium.launch(
-        headless=True,
+        headless=False,  # better for GitHub Actions anti-bot
         args=[
-            "--disable-blink-features=AutomationControlled"
+            "--disable-blink-features=AutomationControlled",
+            "--no-sandbox",
+            "--disable-dev-shm-usage",
+            "--disable-gpu"
         ]
     )
 
     context = browser.new_context(
-        user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36"
+        user_agent=(
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+            "AppleWebKit/537.36 (KHTML, like Gecko) "
+            "Chrome/125.0.0.0 Safari/537.36"
+        ),
+        viewport={
+            "width": 1366,
+            "height": 768
+        }
     )
 
     page = context.new_page()
 
     # =====================================================
-    # Capture ALL network responses
+    # CAPTURE ALL RESPONSES FROM ENTIRE CONTEXT
     # =====================================================
     def handle_response(response):
         global found
@@ -33,10 +44,12 @@ with sync_playwright() as p:
         try:
             url = response.url
 
-            # Detect m3u8 stream
-            if ".m3u8" in url and "ntv7" in url:
+            print(url)
 
-                # Make sure full authenticated URL
+            # Detect ANY m3u8
+            if ".m3u8" in url:
+
+                # Prefer authenticated URL
                 if "bpkio_sessionid" in url:
 
                     found = url
@@ -46,15 +59,16 @@ with sync_playwright() as p:
                     print(url)
                     print("================================\n")
 
-        except Exception:
-            pass
+        except Exception as e:
+            print(e)
 
-    page.on("response", handle_response)
+    # IMPORTANT
+    context.on("response", handle_response)
 
     # =====================================================
-    # Open homepage
+    # OPEN TONTON
     # =====================================================
-    print("Opening Tonton homepage...")
+    print("Opening homepage...")
 
     page.goto(
         "https://www.tonton.com.my",
@@ -65,11 +79,14 @@ with sync_playwright() as p:
     page.wait_for_timeout(8000)
 
     # =====================================================
-    # Open login popup
+    # OPEN LOGIN POPUP
     # =====================================================
     print("Waiting Sign In button...")
 
-    page.wait_for_selector('text=Sign In', timeout=30000)
+    page.wait_for_selector(
+        'text=Sign In',
+        timeout=60000
+    )
 
     print("Opening login popup...")
 
@@ -78,20 +95,20 @@ with sync_playwright() as p:
 
     popup = popup_info.value
 
-    popup.wait_for_load_state("networkidle")
-
-    print("Popup loaded")
+    popup.wait_for_load_state("domcontentloaded")
 
     popup.wait_for_timeout(5000)
 
+    print("Popup loaded")
+
     # =====================================================
-    # Fill credentials
+    # LOGIN
     # =====================================================
     print("Entering credentials...")
 
     popup.wait_for_selector(
         'input[type="text"]',
-        timeout=30000
+        timeout=60000
     )
 
     popup.fill(
@@ -105,34 +122,40 @@ with sync_playwright() as p:
     )
 
     # =====================================================
-    # Human-like mouse move
+    # HUMAN-LIKE MOUSE MOVEMENT
     # =====================================================
-    print("Submitting login...")
-
     submit_btn = popup.locator('#submitBtn')
 
     box = submit_btn.bounding_box()
 
     if box:
+
         popup.mouse.move(
             box["x"] + box["width"] / 2,
             box["y"] + box["height"] / 2,
-            steps=20
+            steps=30
         )
 
-        popup.wait_for_timeout(500)
+        popup.wait_for_timeout(1000)
+
+    print("Submitting login...")
 
     submit_btn.click()
 
     # =====================================================
-    # WAIT AFTER LOGIN (ADVERTISEMENT)
+    # WAIT LOGIN COMPLETE
     # =====================================================
-    print("Waiting advertisement after login...")
+    print("Waiting after login...")
 
-    page.wait_for_timeout(3000)
+    popup.wait_for_timeout(15000)
+
+    try:
+        popup.wait_for_load_state("networkidle", timeout=15000)
+    except:
+        pass
 
     # =====================================================
-    # Close popup if still exists
+    # CLOSE POPUP
     # =====================================================
     try:
         popup.close()
@@ -140,9 +163,9 @@ with sync_playwright() as p:
         pass
 
     # =====================================================
-    # Navigate to NTV7 live page
+    # OPEN LIVE PAGE
     # =====================================================
-    print("Opening NTV7 page...")
+    print("Opening NTV7 live page...")
 
     page.goto(
         TARGET,
@@ -151,27 +174,28 @@ with sync_playwright() as p:
     )
 
     # =====================================================
-    # Wait for player & network requests
+    # WAIT PLAYER LOAD
     # =====================================================
-    print("Waiting stream network requests...")
+    print("Waiting stream requests...")
 
-    # Allow video player to initialize
-    page.wait_for_timeout(80000)
+    page.wait_for_timeout(45000)
 
-   
+    browser.close()
+
 # =====================================================
-# Validate result
+# VALIDATE
 # =====================================================
 if not found:
     raise Exception("No stream URL found")
 
 # =====================================================
-# Clean duplicated escaped URLs if needed
+# CLEAN URL
 # =====================================================
+found = found.replace("\\u0026", "&")
 found = re.sub(r'\\\\u0026', '&', found)
 
 # =====================================================
-# Generate M3U
+# GENERATE M3U
 # =====================================================
 m3u = f"""#EXTM3U
 #EXTINF:-1 tvg-id="NTV7.my" tvg-name="NTV7" group-title="Malaysia",NTV7
