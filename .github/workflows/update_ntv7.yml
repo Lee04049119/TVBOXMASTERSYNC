@@ -39,7 +39,7 @@ jobs:
           git config user.name "Lee04049119"
           git config user.email "jianbiao0404@gmail.com"
 
-          git add ntv7.m3u
+          git add streams/ntv7.m3u
 
           git diff --cached --quiet || \
           git commit -m "Update NTV7 stream"
