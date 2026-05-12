@@ -31,8 +31,8 @@ jobs:
           playwright install --with-deps chromium
 
       - name: Run updater
-       run: |
-          run python update_ntv7.py
+        run: |
+          python update_ntv7.py
 
       - name: Commit changes
         run: |
