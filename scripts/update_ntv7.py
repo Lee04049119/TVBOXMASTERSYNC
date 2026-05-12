@@ -158,30 +158,7 @@ with sync_playwright() as p:
     # Allow video player to initialize
     page.wait_for_timeout(20000)
 
-    # =====================================================
-    # Fallback: scrape performance entries
-    # =====================================================
-    if not found:
-
-        print("Trying fallback performance scrape...")
-
-        urls = page.evaluate("""
-        () => {
-            return performance
-                .getEntriesByType('resource')
-                .map(r => r.name)
-        }
-        """)
-
-        for url in urls:
-            if ".m3u8" in url and "ntv7" in url:
-
-                if "bpkio_sessionid" in url:
-                    found = url
-                    break
-
-    browser.close()
-
+   
 # =====================================================
 # Validate result
 # =====================================================
