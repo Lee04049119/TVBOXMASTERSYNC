@@ -32,7 +32,7 @@ jobs:
           TONTON_EMAIL: ${{ secrets.TONTON_EMAIL }}
           TONTON_PASSWORD: ${{ secrets.TONTON_PASSWORD }}
         run: |
-          python ntv7.py
+          python scripts/update_ntv7.py
 
       - name: Commit updated m3u
         run: |
