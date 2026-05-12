@@ -1,24 +1,20 @@
+# =====================================================
+# update_ntv7.py
+# =====================================================
+
 import os
-import sys
 import time
 import json
 import re
 import shutil
-import subprocess
 
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 
-try:
-    from webdriver_manager.chrome import ChromeDriverManager
-    _HAS_WDM = True
-except Exception:
-    _HAS_WDM = False
-
 # =====================================================
-# CONFIG
+# ENV
 # =====================================================
 
 EMAIL = os.getenv("TONTON_EMAIL")
@@ -26,12 +22,17 @@ PASSWORD = os.getenv("TONTON_PASSWORD")
 
 TARGET_URL = "https://watch.tonton.com.my/live/ntv7"
 
-MAX_WAIT = 40
+# =====================================================
+# SETTINGS
+# =====================================================
+
+MAX_WAIT = 60
 POLL_INTERVAL = 0.5
 
+# Accept ANY authenticated Tonton playlist
 M3U8_RE = re.compile(
-    r'https?://[^\'"\s>]+\.m3u8[^\'"\s>]*',
-    flags=re.IGNORECASE
+    r'https?://[^\'"\s]+\.m3u8[^\'"\s]*',
+    re.IGNORECASE
 )
 
 # =====================================================
@@ -41,12 +42,22 @@ M3U8_RE = re.compile(
 def now():
     return time.strftime("%H:%M:%S")
 
-def extract_m3u8(text):
-    if not text:
-        return []
-    return M3U8_RE.findall(text)
+def clean_url(url):
 
-def find_chromedriver():
+    # Fix escaped &
+    url = url.replace("\\u0026", "&")
+
+    # Remove duplicated backslashes
+    url = url.replace("\\", "")
+
+    return url.strip()
+
+# =====================================================
+# CHROMEDRIVER
+# =====================================================
+
+def get_chromedriver():
+
     env_path = os.getenv("CHROMEDRIVER_PATH")
 
     if env_path and os.path.exists(env_path):
@@ -57,29 +68,30 @@ def find_chromedriver():
     if path:
         return path
 
-    if _HAS_WDM:
-        try:
-            return ChromeDriverManager().install()
-        except Exception:
-            pass
-
     return None
 
 # =====================================================
 # CREATE DRIVER
 # =====================================================
 
-def make_driver():
+def create_driver():
 
-    chrome_options = Options()
+    options = Options()
 
-    chrome_options.add_argument("--headless=new")
-    chrome_options.add_argument("--no-sandbox")
-    chrome_options.add_argument("--disable-dev-shm-usage")
-    chrome_options.add_argument("--disable-gpu")
-    chrome_options.add_argument("--disable-blink-features=AutomationControlled")
+    # GitHub Actions safer mode
+    options.add_argument("--headless")
 
-    chrome_options.add_argument(
+    options.add_argument("--no-sandbox")
+    options.add_argument("--disable-dev-shm-usage")
+    options.add_argument("--disable-gpu")
+
+    options.add_argument(
+        "--disable-blink-features=AutomationControlled"
+    )
+
+    options.add_argument("--window-size=1366,768")
+
+    options.add_argument(
         "--user-agent=Mozilla/5.0 "
         "(Windows NT 10.0; Win64; x64) "
         "AppleWebKit/537.36 "
@@ -87,21 +99,28 @@ def make_driver():
         "Chrome/125.0.0.0 Safari/537.36"
     )
 
-    chrome_options.set_capability(
+    # Chromium path for Ubuntu GitHub Actions
+    chrome_bin = os.getenv("CHROME_BIN")
+
+    if chrome_bin:
+        options.binary_location = chrome_bin
+
+    # Enable performance logs
+    options.set_capability(
         "goog:loggingPrefs",
         {"performance": "ALL"}
     )
 
-    driver_path = find_chromedriver()
+    chromedriver = get_chromedriver()
 
-    if driver_path:
-        service = Service(driver_path)
+    if chromedriver:
+        service = Service(chromedriver)
     else:
         service = Service()
 
     driver = webdriver.Chrome(
         service=service,
-        options=chrome_options
+        options=options
     )
 
     driver.set_page_load_timeout(120)
@@ -115,38 +134,43 @@ def make_driver():
 def main():
 
     if not EMAIL or not PASSWORD:
-        raise Exception("Missing TONTON_EMAIL or TONTON_PASSWORD")
+        raise Exception(
+            "Missing TONTON_EMAIL or TONTON_PASSWORD"
+        )
 
-    print(f"{now()} Starting Tonton capture")
+    print(f"{now()} Starting scraper")
 
-    driver = make_driver()
+    driver = create_driver()
 
     try:
 
         # =================================================
-        # ENABLE NETWORK LOGGING
+        # ENABLE NETWORK
         # =================================================
 
         try:
-            driver.execute_cdp_cmd("Network.enable", {})
+            driver.execute_cdp_cmd(
+                "Network.enable",
+                {}
+            )
         except Exception:
             pass
 
         # =================================================
-        # OPEN HOMEPAGE
+        # OPEN TONTON
         # =================================================
 
-        print(f"{now()} Opening homepage")
+        print(f"{now()} Opening Tonton")
 
         driver.get("https://www.tonton.com.my")
 
         time.sleep(8)
 
         # =================================================
-        # CLICK SIGN IN
+        # SIGN IN
         # =================================================
 
-        print(f"{now()} Opening login popup")
+        print(f"{now()} Opening login")
 
         sign_in = driver.find_element(
             By.XPATH,
@@ -158,7 +182,7 @@ def main():
         time.sleep(8)
 
         # =================================================
-        # SWITCH POPUP
+        # SWITCH WINDOW
         # =================================================
 
         handles = driver.window_handles
@@ -171,7 +195,7 @@ def main():
         time.sleep(5)
 
         # =================================================
-        # LOGIN
+        # LOGIN FORM
         # =================================================
 
         email_input = driver.find_element(
@@ -185,6 +209,7 @@ def main():
         )
 
         email_input.send_keys(EMAIL)
+
         password_input.send_keys(PASSWORD)
 
         time.sleep(1)
@@ -201,26 +226,26 @@ def main():
         time.sleep(10)
 
         # =================================================
-        # RETURN MAIN WINDOW
+        # RETURN MAIN TAB
         # =================================================
 
         driver.switch_to.window(handles[0])
 
         # =================================================
-        # OPEN LIVE PAGE
+        # OPEN STREAM PAGE
         # =================================================
 
-        print(f"{now()} Opening live stream")
+        print(f"{now()} Opening NTV7")
 
         driver.get(TARGET_URL)
 
-        time.sleep(15)
+        time.sleep(20)
 
         # =================================================
-        # CAPTURE M3U8
+        # CAPTURE STREAM
         # =================================================
 
-        found = set()
+        found = None
         processed = set()
 
         start = time.time()
@@ -253,51 +278,38 @@ def main():
                 params = msg.get("params", {})
 
                 # =========================================
-                # REQUEST URL
+                # REQUEST
                 # =========================================
 
                 if method == "Network.requestWillBeSent":
 
-                    url = (
-                        params.get("request", {})
-                        .get("url", "")
+                    request = params.get(
+                        "request",
+                        {}
                     )
 
+                    url = request.get("url", "")
+
+                    url_lower = url.lower()
+
+                    # =====================================
+                    # REAL TONTON STREAM DETECTION
+                    # =====================================
+
                     if (
-                        ".m3u8" in url.lower()
+                        ".m3u8" in url_lower
+                        and "tonton.com.my" in url_lower
                         and "bpkio_sessionid" in url
                     ):
 
-                        if url not in found:
+                        found = clean_url(url)
 
-                            found.add(url)
+                        print("\n================================")
+                        print("FOUND STREAM URL")
+                        print(found)
+                        print("================================\n")
 
-                            print(
-                                f"\n{now()} FOUND STREAM:\n{url}\n"
-                            )
-
-                # =========================================
-                # RESPONSE URL
-                # =========================================
-
-                elif method == "Network.responseReceived":
-
-                    resp = params.get("response", {})
-
-                    url = resp.get("url", "")
-
-                    if (
-                        ".m3u8" in url.lower()
-                        and "bpkio_sessionid" in url
-                    ):
-
-                        if url not in found:
-
-                            found.add(url)
-
-                            print(
-                                f"\n{now()} FOUND RESPONSE:\n{url}\n"
-                            )
+                        break
 
             if found:
                 break
@@ -305,42 +317,48 @@ def main():
             time.sleep(POLL_INTERVAL)
 
         # =================================================
-        # OUTPUT M3U
+        # VALIDATE
         # =================================================
 
         if not found:
+            raise Exception(
+                "No authenticated stream found"
+            )
 
-            print("No stream found")
-            sys.exit(1)
+        # =================================================
+        # CREATE STREAMS FOLDER
+        # =================================================
 
-        stream_url = sorted(found)[0]
-
-        stream_url = re.sub(
-            r'\\u0026',
-            '&',
-            stream_url
+        os.makedirs(
+            "streams",
+            exist_ok=True
         )
 
-        print("\n================================")
-        print("FINAL STREAM URL")
-        print(stream_url)
-        print("================================\n")
+        # =================================================
+        # GENERATE M3U
+        # =================================================
 
         m3u = f"""#EXTM3U
 #EXTINF:-1 tvg-id="NTV7.my" tvg-name="NTV7" group-title="Malaysia",NTV7
 #EXTVLCOPT:http-user-agent=Mozilla/5.0
 #EXTVLCOPT:http-referrer=https://watch.tonton.com.my/
-{stream_url}
+{found}
 """
 
+        output = "streams/ntv7.m3u"
+
         with open(
-            "ntv7.m3u",
+            output,
             "w",
             encoding="utf-8"
         ) as f:
             f.write(m3u)
 
-        print("M3U file saved: ntv7.m3u")
+        print("\n================================")
+        print("M3U UPDATED SUCCESSFULLY")
+        print(found)
+        print("Saved:", output)
+        print("================================\n")
 
     finally:
 
