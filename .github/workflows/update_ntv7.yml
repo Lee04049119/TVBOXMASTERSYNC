@@ -29,7 +29,7 @@ jobs:
           python -m pip install --upgrade pip
       - name: Install dependencies
         run: |
-          pip install --quiet playwright
+          pip install playwright
           playwright install --with-deps chromium
 
       - name: Run updater
