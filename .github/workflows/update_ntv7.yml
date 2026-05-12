@@ -32,7 +32,7 @@ jobs:
 
       - name: Run updater
         run: |
-           xvfb-run python scripts/update_ntv7.py
+           python scripts/update_ntv7.py
 
       - name: Commit changes
         run: |
