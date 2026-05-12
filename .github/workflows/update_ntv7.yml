@@ -30,7 +30,7 @@ jobs:
       - name: Install dependencies
         run: |
           pip install playwright
-          playwright install --with-deps chromium
+          playwright install 
 
       - name: Run updater
         run: |
