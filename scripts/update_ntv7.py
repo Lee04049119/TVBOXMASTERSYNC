@@ -2,57 +2,79 @@ import os
 import re
 from playwright.sync_api import sync_playwright
 
+# =====================================================
+# ENVIRONMENT VARIABLES
+# =====================================================
 EMAIL = os.getenv("TONTON_EMAIL")
 PASSWORD = os.getenv("TONTON_PASSWORD")
 
 TARGET = "https://watch.tonton.com.my/live/ntv7"
 
-found = None
+if not EMAIL or not PASSWORD:
+    raise Exception("Missing TONTON_EMAIL or TONTON_PASSWORD")
 
+# =====================================================
+# STORE FOUND URL
+# =====================================================
+found = {"url": None}
+
+# =====================================================
+# START PLAYWRIGHT
+# =====================================================
 with sync_playwright() as p:
 
     browser = p.chromium.launch(
         headless=True,
         args=[
-            "--disable-blink-features=AutomationControlled"
+            "--disable-blink-features=AutomationControlled",
+            "--no-sandbox",
+            "--disable-dev-shm-usage",
+            "--disable-gpu"
         ]
     )
 
     context = browser.new_context(
-        user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36"
+        viewport={"width": 1366, "height": 768},
+        user_agent=(
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+            "AppleWebKit/537.36 (KHTML, like Gecko) "
+            "Chrome/125.0.0.0 Safari/537.36"
+        )
     )
 
     page = context.new_page()
 
     # =====================================================
-    # Capture ALL network responses
+    # CAPTURE NETWORK RESPONSES
     # =====================================================
     def handle_response(response):
-        global found
 
         try:
             url = response.url
 
-            # Detect m3u8 stream
+            # Debug output
+            if ".m3u8" in url:
+                print("M3U8 DETECTED:", url)
+
+            # Detect authenticated NTV7 stream
             if ".m3u8" in url and "ntv7" in url:
 
-                # Make sure full authenticated URL
                 if "bpkio_sessionid" in url:
 
-                    found = url
+                    found["url"] = url
 
                     print("\n================================")
                     print("FOUND STREAM URL")
                     print(url)
                     print("================================\n")
 
-        except Exception:
-            pass
+        except Exception as e:
+            print("Response error:", e)
 
     page.on("response", handle_response)
 
     # =====================================================
-    # Open homepage
+    # OPEN HOMEPAGE
     # =====================================================
     print("Opening Tonton homepage...")
 
@@ -65,7 +87,7 @@ with sync_playwright() as p:
     page.wait_for_timeout(8000)
 
     # =====================================================
-    # Open login popup
+    # OPEN LOGIN POPUP
     # =====================================================
     print("Waiting Sign In button...")
 
@@ -85,7 +107,7 @@ with sync_playwright() as p:
     popup.wait_for_timeout(5000)
 
     # =====================================================
-    # Fill credentials
+    # ENTER LOGIN DETAILS
     # =====================================================
     print("Entering credentials...")
 
@@ -105,7 +127,7 @@ with sync_playwright() as p:
     )
 
     # =====================================================
-    # Human-like mouse move
+    # HUMAN-LIKE MOUSE MOVEMENT
     # =====================================================
     print("Submitting login...")
 
@@ -125,24 +147,24 @@ with sync_playwright() as p:
     submit_btn.click()
 
     # =====================================================
-    # WAIT AFTER LOGIN (ADVERTISEMENT)
+    # WAIT AFTER LOGIN
     # =====================================================
-    print("Waiting advertisement after login...")
+    print("Waiting after login...")
 
-    page.wait_for_timeout(3000)
+    page.wait_for_timeout(5000)
 
     # =====================================================
-    # Close popup if still exists
+    # CLOSE POPUP
     # =====================================================
     try:
         popup.close()
-    except:
+    except Exception:
         pass
 
     # =====================================================
-    # Navigate to NTV7 live page
+    # OPEN NTV7 PAGE
     # =====================================================
-    print("Opening NTV7 page...")
+    print("Opening NTV7 live page...")
 
     page.goto(
         TARGET,
@@ -151,31 +173,35 @@ with sync_playwright() as p:
     )
 
     # =====================================================
-    # Wait for player & network requests
+    # WAIT FOR STREAM REQUESTS
     # =====================================================
     print("Waiting stream network requests...")
 
-    # Allow video player to initialize
-    page.wait_for_timeout(20000)
+    page.wait_for_timeout(25000)
 
-   
+    browser.close()
+
 # =====================================================
-# Validate result
+# VALIDATE STREAM URL
 # =====================================================
-if not found:
+if not found["url"]:
     raise Exception("No stream URL found")
 
 # =====================================================
-# Clean duplicated escaped URLs if needed
+# CLEAN URL
 # =====================================================
-found = re.sub(r'\\\\u0026', '&', found)
+found_url = re.sub(
+    r'\\\\u0026',
+    '&',
+    found["url"]
+)
 
 # =====================================================
-# Generate M3U
+# GENERATE M3U FILE
 # =====================================================
 m3u = f"""#EXTM3U
 #EXTINF:-1 tvg-id="NTV7.my" tvg-name="NTV7" group-title="Malaysia",NTV7
-{found}
+{found_url}
 """
 
 with open(
@@ -185,7 +211,10 @@ with open(
 ) as f:
     f.write(m3u)
 
+# =====================================================
+# OUTPUT
+# =====================================================
 print("\n================================")
 print("M3U UPDATED SUCCESSFULLY")
-print(found)
+print(found_url)
 print("================================\n")
