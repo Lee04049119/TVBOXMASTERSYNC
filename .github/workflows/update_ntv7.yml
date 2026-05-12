@@ -28,11 +28,11 @@ jobs:
       - name: Install dependencies
         run: |
           pip install playwright
-          playwright install chromium
+          playwright install --with-deps chromium
 
       - name: Run updater
-        run: |
-          python scripts/update_ntv7.py
+       run: |
+          xvfb-run python update_ntv7.py
 
       - name: Commit changes
         run: |
