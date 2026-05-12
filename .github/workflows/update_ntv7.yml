@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   update:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest    # Changed from ubuntu-latest to windows-latest
 
     env:
       TONTON_EMAIL: ${{ secrets.TONTON_EMAIL }}
@@ -32,7 +32,7 @@ jobs:
 
       - name: Run updater
         run: |
-           python scripts/update_ntv7.py
+          python scripts/update_ntv7.py
 
       - name: Commit changes
         run: |
@@ -41,7 +41,7 @@ jobs:
 
           git add streams/ntv7.m3u
 
-          git diff --cached --quiet || \
+          git diff --cached --quiet || `
           git commit -m "Update NTV7 stream"
 
           git push
