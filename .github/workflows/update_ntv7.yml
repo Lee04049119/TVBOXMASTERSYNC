@@ -111,7 +111,7 @@ jobs:
       - name: Save file to repo
         run: |
           mkdir -p streams
-          mv ntv.m3u streams/ntv.m3u
+          mv ntv7.m3u streams/ntv7.m3u
 
 
       - name: Commit changes
