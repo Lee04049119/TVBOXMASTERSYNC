@@ -21,8 +21,8 @@ except Exception:
 # CONFIG
 # =====================================================
 
-EMAIL = os.getenv("TONTON_EMAIL")
-PASSWORD = os.getenv("TONTON_PASSWORD")
+EMAIL = "jianbiao0404@gmail.com"
+PASSWORD = "biao9119"
 
 TARGET_URL = "https://watch.tonton.com.my/live/ntv7"
 
@@ -225,7 +225,7 @@ def main():
 {stream_url}
 """
 
-        with open("ntv7.m3u", "w", encoding="utf-8") as f:
+        with open("streams/ntv7.m3u", "w", encoding="utf-8") as f:
             f.write(m3u)
 
         print("✅ Saved ntv7.m3u")
