@@ -108,6 +108,10 @@ jobs:
       # ============================================
       # COMMIT CHANGES
       # ============================================
+      - name: Save file to repo
+        run: |
+          mkdir -p streams
+          mv ntv.m3u streams/ntv.m3u
 
 
       - name: Commit changes
