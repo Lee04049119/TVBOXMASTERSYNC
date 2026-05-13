@@ -21,9 +21,16 @@ except Exception:
 # CONFIG
 # =====================================================
 
-EMAIL = "jianbiao0404@gmail.com"
-PASSWORD = "biao9119"
+EMAIL = os.getenv("TONTON_EMAIL")
+PASSWORD = os.getenv("TONTON_PASSWORD")
+print("EMAIL loaded:", EMAIL is not None)
+print("PASSWORD loaded:", PASSWORD is not None)
 
+if EMAIL:
+    print("EMAIL preview:", EMAIL[:3] + "***")
+
+if PASSWORD:
+    print("PASSWORD length:", len(PASSWORD))
 TARGET_URL = "https://watch.tonton.com.my/live/ntv7"
 
 MAX_WAIT = 90
