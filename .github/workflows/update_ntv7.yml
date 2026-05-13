@@ -108,10 +108,7 @@ jobs:
       # ============================================
       # COMMIT CHANGES
       # ============================================
-      - name: Save file to repo
-        run: |
-          mkdir -p streams
-          mv ntv7.m3u streams/ntv7.m3u
+
 
 
       - name: Commit changes
@@ -121,7 +118,7 @@ jobs:
 
           git add streams/ntv7.m3u
 
-          git diff --cached --quiet || \
+          git diff --cached --quiet || git commit -m "Update ntv7.m3u"
           git commit -m "Update NTV7 stream"
 
           git push
