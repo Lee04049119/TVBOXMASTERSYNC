@@ -109,10 +109,11 @@ jobs:
       # COMMIT CHANGES
       # ============================================
 
+
       - name: Commit changes
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config user.name "Lee04049119"
+          git config user.email "jianbiao0404@gmail.com"
 
           git add streams/ntv7.m3u
 
