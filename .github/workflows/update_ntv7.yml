@@ -28,42 +28,64 @@ jobs:
       # ============================================
 
       - name: Setup Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v4
         with:
-          python-version: "3.11"
+          python-version: "3.x"
 
-      # ============================================
-      # INSTALL CHROMIUM
-      # ============================================
+      - name: Cache pip
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
 
-      - name: Install Chromium + Chromedriver
+      - name: Install system dependencies (Chromium + chromedriver)
         run: |
-          sudo apt-get update
-
-          sudo apt-get install -y \
-            chromium-browser \
-            chromium-chromedriver \
-            wget \
-            curl \
-            unzip
-
-          echo "CHROME_BIN=$(which chromium-browser)" >> $GITHUB_ENV
-          echo "CHROMEDRIVER_PATH=$(which chromedriver)" >> $GITHUB_ENV
-
-          echo "========== VERSION =========="
+          sudo apt-get update -y
+          # Install chromium and chromedriver so a compatible driver is available from PATH
+          sudo apt-get install -y chromium-browser chromium-chromedriver wget gnupg2 ca-certificates unzip
+          # show versions for debugging
+          echo "=== chrome/chromium versions ==="
+          google-chrome --version || true
           chromium-browser --version || true
           chromedriver --version || true
-          echo "============================="
+          # export chromedriver path to GITHUB_ENV so script can pick it up
+          echo "CHROMEDRIVER_PATH=$(which chromedriver)" >> $GITHUB_ENV
+          echo "BROWSER_PATH=$(which chromium-browser || true)" >> $GITHUB_ENV
 
       # ============================================
       # INSTALL PYTHON PACKAGES
       # ============================================
 
-      - name: Install dependencies
+      - name: Install Python dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install selenium webdriver-manager
+          if [ -f requirements.txt ]; then
+            pip install -r requirements.txt
+          else
+            echo "requirements.txt not found — installing minimal deps"
+            pip install selenium webdriver-manager
+          fi
 
+      - name: Run Selenium script (🟢CLICK HERE TO VIEW RESULTS)
+        env:
+          TARGET_URL: ${{ github.event.inputs.url }}
+          MAX_WAIT_SECONDS: ${{ github.event.inputs.max_wait }}
+          # CHROMEDRIVER_PATH set earlier; your script reads this to skip downloads
+          CHROMEDRIVER_PATH: ${{ env.CHROMEDRIVER_PATH }}
+        run: |
+          echo -e "Running Selenium Script with TARGET_URL=${TARGET_URL} and MAX_WAIT_SECONDS=${MAX_WAIT_SECONDS}"
+          # make sure script is executable if needed
+          ls -l
+          python fetch_stream.py 2>&1 | tee fetch_stream_output.txt
+
+      - name: Upload run log as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: fetch-stream-log
+          path: fetch_stream_output.txt
       # ============================================
       # CREATE STREAMS FOLDER
       # ============================================

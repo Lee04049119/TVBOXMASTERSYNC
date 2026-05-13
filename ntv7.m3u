@@ -1,0 +1,5 @@
+#EXTM3U
+#EXTINF:-1 tvg-id="NTV7.my" tvg-name="NTV7" group-title="Malaysia",NTV7
+#EXTVLCOPT:http-user-agent=Mozilla/5.0
+#EXTVLCOPT:http-referrer=https://watch.tonton.com.my/
+https://live-ssar-02.tonton.com.my/1778612776/5e50f8b0fc0ecd34bab89c09dfa07e75f41f47be4ad2a560ce227380caedd673/ntv7/02.m3u8?bpkio_serviceid=6c0958d82a830a0283e4c742ef6db379&bpkio_sessionid=10c3d202a193-63629b04-ee24-4b0c-ab1a-fd3afabdff26&category=all&did=fa918b07-4703-5fe7-93fc-6b1469c35db5&dnt=0&ifatype=sessionid&lot_auds&mm_sp&plt=web&ttd_uid2=A4AAADRPtQ43PuXOyVhU2QbVTkR-IG9uBs6hgtswo851q79P8z8a6aAMXuU9c7cd5VA2OEc4rzpV_m6jpe-J5h48AGiTPbJXaQd0K_mhkA1R4HyJCaavJ9W-NVT4L9W7ad0yQXMFnzsIn_ZN-IVGoeOPeZo0eSPp8Yoyohu1IKcs8yTF_A0WyEgJeqPwy5-ZFvbi6XWv8s-BPJAMBHbMOVKiNg
