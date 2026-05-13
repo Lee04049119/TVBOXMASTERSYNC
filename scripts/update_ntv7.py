@@ -27,7 +27,7 @@ PASSWORD = os.getenv("TONTON_PASSWORD")
 
 MAX_WAIT = 90
 POLL_INTERVAL = 0.5
-
+TARGET_URL = "https://watch.tonton.com.my/live/ntv7"
 M3U8_RE = re.compile(r'https?://[^\s\'"]+\.m3u8[^\s\'"]*', re.IGNORECASE)
 
 
