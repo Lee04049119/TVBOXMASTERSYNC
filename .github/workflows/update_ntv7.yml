@@ -13,6 +13,11 @@ jobs:
   update-stream:
 
     runs-on: ubuntu-latest
+    env:
+          TONTON_EMAIL: ${{ secrets.TONTON_EMAIL }}
+          TONTON_PASSWORD: ${{ secrets.TONTON_PASSWORD }}
+
+          
 
     steps:
 
@@ -71,9 +76,11 @@ jobs:
 
       - name: Run Selenium script (🟢CLICK HERE TO VIEW RESULTS)
         env:
+                  
           TARGET_URL: ${{ github.event.inputs.url }}
           MAX_WAIT_SECONDS: ${{ github.event.inputs.max_wait }}
           # CHROMEDRIVER_PATH set earlier; your script reads this to skip downloads
+          CHROME_BIN: ${{ env.CHROME_BIN }}
           CHROMEDRIVER_PATH: ${{ env.CHROMEDRIVER_PATH }}
         run: |
           echo -e "Running Selenium Script with TARGET_URL=${TARGET_URL} and MAX_WAIT_SECONDS=${MAX_WAIT_SECONDS}"
@@ -86,28 +93,7 @@ jobs:
         with:
           name: fetch-stream-log
           path: fetch_stream_output.txt
-      # ============================================
-      # CREATE STREAMS FOLDER
-      # ============================================
-
-      - name: Create streams folder
-        run: |
-          mkdir -p streams
-
-      # ============================================
-      # RUN UPDATER
-      # ============================================
-
-      - name: Run updater
-        env:
-          TONTON_EMAIL: ${{ secrets.TONTON_EMAIL }}
-          TONTON_PASSWORD: ${{ secrets.TONTON_PASSWORD }}
-
-          CHROME_BIN: ${{ env.CHROME_BIN }}
-          CHROMEDRIVER_PATH: ${{ env.CHROMEDRIVER_PATH }}
-
-        run: |
-          python scripts/update_ntv7.py
+    
 
       # ============================================
       # SHOW GENERATED FILE
