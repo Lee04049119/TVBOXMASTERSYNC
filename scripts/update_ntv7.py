@@ -9,6 +9,8 @@ from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
 try:
     from webdriver_manager.chrome import ChromeDriverManager
@@ -119,7 +121,16 @@ def main():
 
         # Click Sign In
         print(f"{now()} Opening login")
-        driver.find_element(By.XPATH, "//*[contains(text(),'Sign In')]").click()
+        wait = WebDriverWait(driver, 30)
+
+        signin = wait.until(
+           EC.element_to_be_clickable((
+             By.XPATH,
+              "//span[contains(text(),'Sign In')]/ancestor::button"
+             ))
+         )
+
+        signin.click()
         time.sleep(8)
 
         # Switch popup
