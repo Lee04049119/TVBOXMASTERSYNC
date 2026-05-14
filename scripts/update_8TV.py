@@ -25,7 +25,7 @@ PASSWORD = "biao9119"
 MAX_WAIT = 90
 POLL_INTERVAL = 0.5
 
-TARGET_URL = "https://watch.tonton.com.my/live/ntv7"
+TARGET_URL = "https://watch.tonton.com.my/live/8tv"
 
 M3U8_RE = re.compile(r'https?://[^\s\'"]+\.m3u8[^\s\'"]*', re.IGNORECASE)
 
@@ -212,7 +212,7 @@ def main():
 
         # Save M3U
         m3u = f"""#EXTM3U
-#EXTINF:-1 tvg-id="NTV7.my" tvg-name="NTV7" group-title="Malaysia",NTV7
+#EXTINF:-1 tvg-id="8TV.my" tvg-name="8TV" group-title="Malaysia",8TV
 #EXTVLCOPT:http-user-agent=Mozilla/5.0
 #EXTVLCOPT:http-referrer=https://watch.tonton.com.my/
 {stream_url}
@@ -220,10 +220,10 @@ def main():
 
         os.makedirs("streams", exist_ok=True)
 
-        with open("streams/ntv7.m3u", "w", encoding="utf-8") as f:
+        with open("streams/8tv.m3u", "w", encoding="utf-8") as f:
             f.write(m3u)
 
-        print("✅ Saved ntv7.m3u")
+        print("✅ Saved 8tv.m3u")
 
     finally:
         try:
