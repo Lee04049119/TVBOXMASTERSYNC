@@ -4,7 +4,7 @@ import time
 import json
 import re
 import shutil
-
+import subprocess
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
@@ -30,9 +30,12 @@ TARGET_URL = "https://watch.tonton.com.my/live/ntv7"
 MAX_WAIT = 90
 POLL_INTERVAL = 0.5
 
-M3U8_RE = re.compile(r'https?://[^\s\'"]+\.m3u8[^\s\'"]*', re.IGNORECASE)
+M3U8_RE = re.compile(r'https?://[^\s\'"]*\.m3u8(?:\?[^\s\'"]*)?', re.IGNORECASE)
 
-
+def extract_m3u8_from_text(text):
+    if not text:
+        return []
+    return M3U8_RE.findall(text)
 # =====================================================
 # HELPERS
 # =====================================================
@@ -53,18 +56,29 @@ def find_chromedriver():
 
     if _HAS_WDM:
         try:
-            return ChromeDriverManager().install()
+            # cache_valid_range reduces repeated network activity in wdm
+            return ChromeDriverManager(cache_valid_range=365).install()
         except Exception:
-            pass
+            return None
 
     return None
-
+def get_chrome_version():
+    # best-effort detection of installed chrome/chromium version
+    for cmd in (["google-chrome","--version"], ["chrome","--version"], ["chromium","--version"], ["google-chrome-stable","--version"]):
+        exe = shutil.which(cmd[0])
+        if exe:
+            try:
+                out = subprocess.check_output([exe, "--version"], stderr=subprocess.STDOUT)
+                return out.decode(errors="ignore").strip()
+            except Exception:
+                continue
+    return None
 
 # =====================================================
 # CREATE DRIVER
 # =====================================================
 
-def make_driver():
+def make_driver(chromedriver_path=None):
     chrome_options = Options()
 
     chrome_options.add_argument("--headless=new")
@@ -72,7 +86,14 @@ def make_driver():
     chrome_options.add_argument("--disable-dev-shm-usage")
     chrome_options.add_argument("--disable-gpu")
     chrome_options.add_argument("--disable-blink-features=AutomationControlled")
-
+    chrome_options.add_argument("--disable-extensions")
+    chrome_options.add_argument("--disable-background-networking")
+    chrome_options.add_argument("--no-first-run")
+    chrome_options.add_argument("--disable-translate")
+    chrome_options.add_argument("--disable-features=VizDisplayCompositor")
+    # prefer automation flags
+    chrome_options.add_experimental_option("excludeSwitches", ["enable-automation"])
+    chrome_options.add_experimental_option("useAutomationExtension", False)
     chrome_options.add_argument(
         "--user-agent=Mozilla/5.0 "
         "(Windows NT 10.0; Win64; x64) "
@@ -104,8 +125,23 @@ def main():
         raise Exception("Missing TONTON_EMAIL or TONTON_PASSWORD")
 
     print(f"{now()} Starting capture")
+############################    
+#  check chrome version
+#########################
+    chromedriver_path = find_chromedriver()
+    if chromedriver_path:
+        print(f"{now()} Using chromedriver: {chromedriver_path}")
+    else:
+        print(f"{now()} No chromedriver found in PATH or env. webdriver_manager available: {_HAS_WDM}")
 
-    driver = make_driver()
+    chrome_ver = get_chrome_version()
+    if chrome_ver:
+        print(f"{now()} Detected Chrome version: {chrome_ver}")
+
+    driver = None
+    
+    
+    driver = make_driver(chromedriver_path)
 
     try:
         # Enable network logs
@@ -198,22 +234,76 @@ def main():
                 method = msg.get("method", "")
                 params = msg.get("params", {})
 
-                if method in ["Network.requestWillBeSent", "Network.responseReceived"]:
-                    url = ""
+            # =========================
+            # REQUEST
+            # =========================
+            if method == "Network.requestWillBeSent":
+                url = params.get("request", {}).get("url", "") or ""
 
-                    if method == "Network.requestWillBeSent":
-                        url = params.get("request", {}).get("url", "")
-                    else:
-                        url = params.get("response", {}).get("url", "")
+                if ".m3u8" in url.lower() and url not in found:
+                    found.add(url)
+                    print(f"{now()} 🟢 Found (request): {url}")
 
-                    if ".m3u8" in url.lower():
-                        clean_url = re.sub(r'\\u0026', '&', url)
+            # =========================
+            # RESPONSE
+            # =========================
+            elif method == "Network.responseReceived":
+                resp = params.get("response", {}) or {}
 
-                        if clean_url not in found:
-                            found.add(clean_url)
-                            print(f"\n{now()} FOUND:\n{clean_url}\n")
+                url = resp.get("url", "") or ""
+                mime = (resp.get("mimeType") or "").lower()
 
-            time.sleep(POLL_INTERVAL)
+                is_m3u8 = (
+                    ".m3u8" in url.lower()
+                    or "mpegurl" in mime
+                )
+
+                if is_m3u8 and url not in found:
+                    found.add(url)
+                    print(f"{now()} 🟢 Found (response): {url}")
+
+                # =========================
+                # BODY SCAN
+                # =========================
+                should_fetch_body = False
+
+                if any(url.lower().endswith(x) for x in ('.json', '.js', '.txt', '.html')):
+                    should_fetch_body = True
+
+                if any(x in mime for x in ("json", "javascript", "text", "html")):
+                    should_fetch_body = True
+
+                if resp.get("encodedDataLength", 0) > 200_000:
+                    should_fetch_body = False
+
+                if should_fetch_body:
+                    request_id = params.get("requestId")
+
+                    if request_id:
+                        try:
+                            body = driver.execute_cdp_cmd(
+                                "Network.getResponseBody",
+                                {"requestId": request_id}
+                            )
+
+                            body_text = body.get("body", "") if isinstance(body, dict) else ""
+
+                            if body_text:
+                                matches = extract_m3u8_from_text(body_text)
+
+                                for m in matches:
+                                    if m not in found:
+                                        found.add(m)
+                                        print(f"{now()} 🟢 Found (body): {m}")
+
+                        except Exception:
+                            pass
+
+        if found:
+            print(f"{now()} ✅ Done (found stream)")
+            return list(found)
+
+        time.sleep(POLL_INTERVAL)
 
         if not found:
             print("❌ No stream found")
