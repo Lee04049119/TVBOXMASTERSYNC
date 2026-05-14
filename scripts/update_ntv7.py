@@ -16,16 +16,17 @@ try:
 except Exception:
     _HAS_WDM = False
 
+
 # =====================================================
 # CONFIG
 # =====================================================
+
 EMAIL = "jianbiao0404@gmail.com"
 PASSWORD = "biao9119"
+TARGET_URL = "https://watch.tonton.com.my/live/ntv7"
 
 MAX_WAIT = 90
 POLL_INTERVAL = 0.5
-
-TARGET_URL = "https://watch.tonton.com.my/live/ntv7"
 
 M3U8_RE = re.compile(r'https?://[^\s\'"]+\.m3u8[^\s\'"]*', re.IGNORECASE)
 
@@ -33,12 +34,14 @@ M3U8_RE = re.compile(r'https?://[^\s\'"]+\.m3u8[^\s\'"]*', re.IGNORECASE)
 # =====================================================
 # HELPERS
 # =====================================================
+
 def now():
     return time.strftime("%H:%M:%S")
 
 
 def find_chromedriver():
     env_path = os.getenv("CHROMEDRIVER_PATH")
+
     if env_path and os.path.exists(env_path):
         return env_path
 
@@ -58,8 +61,10 @@ def find_chromedriver():
 # =====================================================
 # CREATE DRIVER
 # =====================================================
+
 def make_driver():
     chrome_options = Options()
+
     chrome_options.add_argument("--headless=new")
     chrome_options.add_argument("--no-sandbox")
     chrome_options.add_argument("--disable-dev-shm-usage")
@@ -75,7 +80,8 @@ def make_driver():
     )
 
     chrome_options.set_capability(
-        "goog:loggingPrefs", {"performance": "ALL"}
+        "goog:loggingPrefs",
+        {"performance": "ALL"}
     )
 
     driver_path = find_chromedriver()
@@ -90,11 +96,13 @@ def make_driver():
 # =====================================================
 # MAIN
 # =====================================================
+
 def main():
     if not EMAIL or not PASSWORD:
         raise Exception("Missing TONTON_EMAIL or TONTON_PASSWORD")
 
     print(f"{now()} Starting capture")
+
     driver = make_driver()
 
     try:
@@ -124,7 +132,6 @@ def main():
         # Login
         driver.find_element(By.CSS_SELECTOR, 'input[type="text"]').send_keys(EMAIL)
         driver.find_element(By.CSS_SELECTOR, 'input[type="password"]').send_keys(PASSWORD)
-
         time.sleep(1)
         driver.find_element(By.ID, "submitBtn").click()
 
@@ -143,10 +150,7 @@ def main():
         try:
             driver.execute_script("""
                 let v = document.querySelector('video');
-                if (v) {
-                    v.muted = true;
-                    v.play();
-                }
+                if (v) { v.muted = true; v.play(); }
             """)
             print(f"{now()} Triggered video play")
         except Exception:
@@ -157,6 +161,7 @@ def main():
         # Capture m3u8
         found = set()
         processed = set()
+
         start = time.time()
 
         print(f"{now()} Capturing streams...")
@@ -169,7 +174,6 @@ def main():
 
             for entry in logs:
                 raw = entry.get("message")
-
                 if not raw or raw in processed:
                     continue
 
@@ -184,6 +188,8 @@ def main():
                 params = msg.get("params", {})
 
                 if method in ["Network.requestWillBeSent", "Network.responseReceived"]:
+                    url = ""
+
                     if method == "Network.requestWillBeSent":
                         url = params.get("request", {}).get("url", "")
                     else:
@@ -218,8 +224,6 @@ def main():
 {stream_url}
 """
 
-        os.makedirs("streams", exist_ok=True)
-
         with open("streams/ntv7.m3u", "w", encoding="utf-8") as f:
             f.write(m3u)
 
@@ -235,5 +239,6 @@ def main():
 # =====================================================
 # START
 # =====================================================
+
 if __name__ == "__main__":
     main()
