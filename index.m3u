@@ -1,5 +1,6 @@
 #EXTM3U
 
+
 #EXTINF:-1 tvg-id="AjmanTV.ae@SD" group-title="UAE",Ajman TV (1080p)
 https://cdn1.logichost.in/ajmantv/live/playlist.m3u8
 #EXTINF:-1 tvg-id="Alarabiya.ae@SD" group-title="UAE",Al Arabiya (1080p)
@@ -153,7 +154,7 @@ http://103.58.160.157:8278/720-CINEMAWORLD/playlist.m3u8
 #EXTINF:-1 tvg-id="NTV7.my" tvg-name="NTV7"  group-title="ntv7",NTV7
 #EXTVLCOPT:http-user-agent=Mozilla/5.0
 #EXTVLCOPT:http-referrer=https://watch.tonton.com.my/
-https://live-ssar-02.tonton.com.my/1778746573/6b0eb5797b282c56c41abd38949d82f293543381eea684ac5b652b55f6d6be38/ntv7/04.m3u8?bpkio_serviceid=6c0958d82a830a0283e4c742ef6db379&bpkio_sessionid=10e3a143b193-fa066725-fe75-429e-aee9-b54f273185b2&category=all&did=70dcafca-618d-d52c-7215-2cf92d48d732&dnt=0&ifatype=sessionid&lot_auds&mm_sp&plt=web&ttd_uid2=A4AAADX9YKUi4Vk7fihYDa4EjwWdkBaYqGwZuqhxf9XOpPfZ3n-YqGJWGO6SykIkxQwcz8g8ssbT2yoJHQJWFKsaH7cMQtLS1a59JTTTY2MpIhWd8NgJZEFSsV3dgXAdwkN9AnEK0Lz3IzOWpVwdHXt-fVJ4uZpisqQd9fx_kTsKQQFqutCadybHP2UJJqB4Eh_GiQBhjouh5yraTklglCU6vg
+https://live-ssar-02.tonton.com.my/1778749357/09c965d074c2dd38a2516f75e65d4aec273ad144984a8f85d7130c82b023db71/ntv7/01.m3u8?bpkio_serviceid=6c0958d82a830a0283e4c742ef6db379&bpkio_sessionid=10d3b230f1-4c917be5-b510-4c03-a05c-7ab58fc72946&category=all&did=de9e47fa-23cc-0375-dc12-cb475ca4ba97&dnt=0&ifatype=sessionid&lot_auds&mm_sp&plt=web&ttd_uid2=A4AAADX9YKUi4Vk7fihYDa4EjwWdkBaYqGwZuqhxf9XOpPfZ3n-YqGJWGO6SykIkxQwcz8g8ssbT2yoJHQJWFKsaH7cMQtLS1a59JTTTY2MpIhWd8NgJZEFSsV3dgXAdwkN9AnEK0Lz3IzOWpVwdHXt-fVJ4uZpisqQd9fx_kTsKQQFqutCadybHP2UJJqB4Eh_GiQBhjouh5yraTklglCU6vg
 
 #EXTINF:-1 tvg-id="逐玉EP1" group-title="逐玉",逐玉
 https://v13.wsyzym3u8.com/202603/06/NkZt7KBvMU27/video/index.m3u8
