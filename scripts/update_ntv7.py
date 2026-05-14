@@ -254,9 +254,12 @@ def main():
                 mime = (resp.get("mimeType") or "").lower()
 
                 is_m3u8 = (
-                    ".m3u8" in url.lower()
-                    or "mpegurl" in mime
-                )
+                  ".m3u8" in url.lower()
+                  or mime in (
+                     "application/vnd.apple.mpegurl",
+                     "application/x-mpegurl"
+                              )
+                            )
 
                 if is_m3u8 and url not in found:
                     found.add(url)
