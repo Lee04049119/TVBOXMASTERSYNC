@@ -16,29 +16,30 @@ try:
 except Exception:
     _HAS_WDM = False
 
+
 # =====================================================
 # CONFIG
 # =====================================================
+
 EMAIL = os.getenv("TONTON_EMAIL")
 PASSWORD = os.getenv("TONTON_PASSWORD")
 
 MAX_WAIT = 90
 POLL_INTERVAL = 0.5
-
 TARGET_URL = "https://watch.tonton.com.my/live/ntv7"
-
-M3U8_RE = re.compile(r'https?://[^\s\'"]+\.m3u8[^\s\'"]*', re.IGNORECASE)
 
 
 # =====================================================
 # HELPERS
 # =====================================================
+
 def now():
     return time.strftime("%H:%M:%S")
 
 
 def find_chromedriver():
     env_path = os.getenv("CHROMEDRIVER_PATH")
+
     if env_path and os.path.exists(env_path):
         return env_path
 
@@ -55,16 +56,27 @@ def find_chromedriver():
     return None
 
 
+def is_stream(url: str):
+    url = url.lower()
+    return any(x in url for x in [".m3u8", ".mpd"])
+
+
 # =====================================================
 # CREATE DRIVER
 # =====================================================
+
 def make_driver():
     chrome_options = Options()
+
+    
     chrome_options.add_argument("--headless=new")
+
     chrome_options.add_argument("--no-sandbox")
     chrome_options.add_argument("--disable-dev-shm-usage")
     chrome_options.add_argument("--disable-gpu")
     chrome_options.add_argument("--disable-blink-features=AutomationControlled")
+
+    chrome_options.add_argument("--autoplay-policy=no-user-gesture-required")
 
     chrome_options.add_argument(
         "--user-agent=Mozilla/5.0 "
@@ -75,7 +87,8 @@ def make_driver():
     )
 
     chrome_options.set_capability(
-        "goog:loggingPrefs", {"performance": "ALL"}
+        "goog:loggingPrefs",
+        {"performance": "ALL"}
     )
 
     driver_path = find_chromedriver()
@@ -90,38 +103,37 @@ def make_driver():
 # =====================================================
 # MAIN
 # =====================================================
+
 def main():
     if not EMAIL or not PASSWORD:
         raise Exception("Missing TONTON_EMAIL or TONTON_PASSWORD")
 
     print(f"{now()} Starting capture")
+
     driver = make_driver()
 
     try:
-        # Enable network logs
-        try:
-            driver.execute_cdp_cmd("Network.enable", {})
-        except Exception:
-            pass
+        # Enable CDP network tracking
+        driver.execute_cdp_cmd("Network.enable", {})
 
-        # Open homepage
+        # ============================================
+        # LOGIN FLOW
+        # ============================================
+
         print(f"{now()} Opening homepage")
         driver.get("https://www.tonton.com.my")
         time.sleep(8)
 
-        # Click Sign In
         print(f"{now()} Opening login")
         driver.find_element(By.XPATH, "//*[contains(text(),'Sign In')]").click()
         time.sleep(8)
 
-        # Switch popup
         handles = driver.window_handles
         if len(handles) > 1:
             driver.switch_to.window(handles[-1])
 
         time.sleep(5)
 
-        # Login
         driver.find_element(By.CSS_SELECTOR, 'input[type="text"]').send_keys(EMAIL)
         driver.find_element(By.CSS_SELECTOR, 'input[type="password"]').send_keys(PASSWORD)
 
@@ -131,37 +143,45 @@ def main():
         print(f"{now()} Logged in")
         time.sleep(10)
 
-        # Back to main window
         driver.switch_to.window(handles[0])
 
-        # Open live page
-        print(f"{now()} Opening stream")
-        driver.get(TARGET_URL)
-        time.sleep(10)
+        # ============================================
+        # PREPARE CAPTURE BEFORE LOADING STREAM
+        # ============================================
 
-        # Try force play
-        try:
-            driver.execute_script("""
-                let v = document.querySelector('video');
-                if (v) {
-                    v.muted = true;
-                    v.play();
-                }
-            """)
-            print(f"{now()} Triggered video play")
-        except Exception:
-            pass
-
-        time.sleep(5)
-
-        # Capture m3u8
         found = set()
         processed = set()
+
+        print(f"{now()} Ready to capture streams...")
+
+        # ============================================
+        # OPEN STREAM PAGE
+        # ============================================
+
+        print(f"{now()} Opening stream page")
+        driver.get(TARGET_URL)
+
         start = time.time()
 
-        print(f"{now()} Capturing streams...")
+        # ============================================
+        # CAPTURE LOOP
+        # ============================================
 
         while time.time() - start < MAX_WAIT:
+
+            # Try force play repeatedly
+            try:
+                driver.execute_script("""
+                    let v = document.querySelector('video');
+                    if (v) {
+                        v.muted = true;
+                        v.autoplay = true;
+                        v.play().catch(() => {});
+                    }
+                """)
+            except Exception:
+                pass
+
             try:
                 logs = driver.get_log("performance")
             except Exception:
@@ -183,26 +203,39 @@ def main():
                 method = msg.get("method", "")
                 params = msg.get("params", {})
 
-                if method in ["Network.requestWillBeSent", "Network.responseReceived"]:
-                    if method == "Network.requestWillBeSent":
-                        url = params.get("request", {}).get("url", "")
-                    else:
-                        url = params.get("response", {}).get("url", "")
+                if method not in ["Network.requestWillBeSent", "Network.responseReceived"]:
+                    continue
 
-                    if ".m3u8" in url.lower():
-                        clean_url = re.sub(r'\\u0026', '&', url)
+                if method == "Network.requestWillBeSent":
+                    url = params.get("request", {}).get("url", "")
+                else:
+                    url = params.get("response", {}).get("url", "")
 
-                        if clean_url not in found:
-                            found.add(clean_url)
-                            print(f"\n{now()} FOUND:\n{clean_url}\n")
+                if not url:
+                    continue
+
+                # Fix encoded URLs
+                url = re.sub(r'\\u0026', '&', url)
+
+                # DEBUG (uncomment if needed)
+                # print(url)
+
+                if is_stream(url):
+                    if url not in found:
+                        found.add(url)
+                        print(f"\n{now()} 🎯 STREAM FOUND:\n{url}\n")
 
             time.sleep(POLL_INTERVAL)
+
+        # ============================================
+        # RESULT
+        # ============================================
 
         if not found:
             print("❌ No stream found")
             sys.exit(1)
 
-        # Prefer highest quality playlist
+        # Prefer longest URL (usually master playlist)
         stream_url = sorted(found, key=len, reverse=True)[0]
 
         print("\n================================")
@@ -210,7 +243,9 @@ def main():
         print(stream_url)
         print("================================\n")
 
-        # Save M3U
+        # Save playlist
+        os.makedirs("streams", exist_ok=True)
+
         m3u = f"""#EXTM3U
 #EXTINF:-1 tvg-id="NTV7.my" tvg-name="NTV7" group-title="Malaysia",NTV7
 #EXTVLCOPT:http-user-agent=Mozilla/5.0
@@ -218,12 +253,10 @@ def main():
 {stream_url}
 """
 
-        os.makedirs("streams", exist_ok=True)
-
         with open("streams/ntv7.m3u", "w", encoding="utf-8") as f:
             f.write(m3u)
 
-        print("✅ Saved ntv7.m3u")
+        print("✅ Saved streams/ntv7.m3u")
 
     finally:
         try:
@@ -235,5 +268,6 @@ def main():
 # =====================================================
 # START
 # =====================================================
+
 if __name__ == "__main__":
     main()
