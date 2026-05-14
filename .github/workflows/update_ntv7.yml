@@ -16,7 +16,8 @@ jobs:
     env:
           TONTON_EMAIL: ${{ secrets.TONTON_EMAIL }}
           TONTON_PASSWORD: ${{ secrets.TONTON_PASSWORD }}
-
+          TARGET_URL: "https://tonton.com.my/live/ntv7"
+          MAX_WAIT_SECONDS: "30"
           
 
     steps:
