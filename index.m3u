@@ -3,7 +3,7 @@
 #EXTINF:-1 tvg-id="8TV.my" tvg-name="8TV"  group-title="8TV",8TV
 #EXTVLCOPT:http-user-agent=Mozilla/5.0
 #EXTVLCOPT:http-referrer=https://watch.tonton.com.my/
-https://live-ssar-02.tonton.com.my/1779009425/62e870200034bb2895070325cfea0427b249171cc6909101cd3f7233a5daa1f9/8tv/01.m3u8?bpkio_serviceid=6c0958d82a830a025a6fffaf4c033deb&bpkio_sessionid=10a3c128e129-133bc867-9d08-4f14-967e-052f7a3b7e07&category=all&did=cad6d0eb-f9ef-a410-e7a5-18e4c79e989b&dnt=0&ifatype=sessionid&lot_auds&mm_sp&plt=web&ttd_uid2=A4AAADYIy1Y5nrszqNthb810AEIcBavNapQ9FDMEakl3XKC3vdOGVzAwrnrWH4RwRqpGruVqUkJqHkj5fmfBuAAM8iP3znXflbNvVHU5fELf-MWpfcA8QJjyEt2YnUDAjp16T0rlrVO6cN9t9Wi047txxEado6ql8JoTfdTxNLSGvlE5RNqpGiiw6BjiQIa2uEyvPVx4qiuhp_kDAAkZ4IgpHQ
+https://live-ssar-02.tonton.com.my/1779025189/1c6cf4a0e2a4eef7c695e40d5925e4807a8396f26512c8271fcb6080d1349902/8tv/02.m3u8?bpkio_serviceid=6c0958d82a830a025a6fffaf4c033deb&bpkio_sessionid=10a3a128a129-31aec0b9-9345-4f4e-9ab9-1b444f8ef752&category=all&did=f6148ee1-9fed-4161-51b5-7333308a9020&dnt=0&ifatype=sessionid&lot_auds&mm_sp&plt=web&ttd_uid2=A4AAADYIy1Y5nrszqNthb810AEIcBavNapQ9FDMEakl3XKC3vdOGVzAwrnrWH4RwRqpGruVqUkJqHkj5fmfBuAAM8iP3znXflbNvVHU5fELf-MWpfcA8QJjyEt2YnUDAjp16T0rlrVO6cN9t9Wi047txxEado6ql8JoTfdTxNLSGvlE5RNqpGiiw6BjiQIa2uEyvPVx4qiuhp_kDAAkZ4IgpHQ
 
 #EXTINF:-1 tvg-id="AjmanTV.ae@SD" group-title="UAE",Ajman TV (1080p)
 https://cdn1.logichost.in/ajmantv/live/playlist.m3u8
