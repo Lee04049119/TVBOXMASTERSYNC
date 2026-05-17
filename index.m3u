@@ -3,7 +3,7 @@
 #EXTINF:-1 tvg-id="8TV.my" tvg-name="8TV"  group-title="8TV",8TV
 #EXTVLCOPT:http-user-agent=Mozilla/5.0
 #EXTVLCOPT:http-referrer=https://watch.tonton.com.my/
-https://live-ssar-02.tonton.com.my/1778763900/cca3cdefc9bb2b3b11e4b2781d33d2027161abd6d4d50ca0773381e6102197a8/8tv/01.m3u8?bpkio_serviceid=6c0958d82a830a025a6fffaf4c033deb&bpkio_sessionid=10f3d240e129-022f0344-5b2b-4faf-9232-1eed4f78f7ed&category=all&did=b7ea5a2f-0cdb-347f-08e3-17bfb4343992&dnt=0&ifatype=sessionid&lot_auds&mm_sp&plt=web&ttd_uid2=A4AAADX9YKUi4Vk7fihYDa4EjwWdkBaYqGwZuqhxf9XOpPfZ3n-YqGJWGO6SykIkxQwcz8g8ssbT2yoJHQJWFKsaH7cMQtLS1a59JTTTY2MpIhWd8NgJZEFSsV3dgXAdwkN9AnEK0Lz3IzOWpVwdHXt-fVJ4uZpisqQd9fx_kTsKQQFqutCadybHP2UJJqB4Eh_GiQBhjouh5yraTklglCU6vg
+https://live-ssar-02.tonton.com.my/1778943276/59b3933c2cd5350bc1a052ad9ddbeeca7a3666d1204926651563f841a639b26f/8tv/04.m3u8?bpkio_serviceid=6c0958d82a830a025a6fffaf4c033deb&bpkio_sessionid=10a3f233e161-2ec47caf-c123-4d2f-ad34-734a4d74789e&category=all&did=392a9b0a-7f7c-9d7f-d22e-b4485d46d2e6&dnt=0&ifatype=sessionid&lot_auds&mm_sp&plt=web&ttd_uid2=A4AAADX9YKUi4Vk7fihYDa4EjwWdkBaYqGwZuqhxf9XOpPfZ3n-YqGJWGO6SykIkxQwcz8g8ssbT2yoJHQJWFKsaH7cMQtLS1a59JTTTY2MpIhWd8NgJZEFSsV3dgXAdwkN9AnEK0Lz3IzOWpVwdHXt-fVJ4uZpisqQd9fx_kTsKQQFqutCadybHP2UJJqB4Eh_GiQBhjouh5yraTklglCU6vg
 
 #EXTINF:-1 tvg-id="AjmanTV.ae@SD" group-title="UAE",Ajman TV (1080p)
 https://cdn1.logichost.in/ajmantv/live/playlist.m3u8
@@ -95,6 +95,23 @@ https://shd-gcp-live.edgenextcdn.net/live/bitmovin-spacetoon/d8382fb9ab4b2307058
 https://shd-gcp-live.edgenextcdn.net/live/bitmovin-wanasah/13e82ea6232fa647c43b26e8a41f173d/index.m3u8
 #EXTINF:-1 tvg-id="WatarRadio.ae@SD" group-title="UAE",Watar Radio (1080p)
 https://svs.itworkscdn.net/smcwatarlive/smcwatar/playlist.m3u8
+
+#EXTINF:-1 tvg-id="功夫" group-title="chowmovie",功夫
+https://p.okokserver.com/link/f_hhu_0e7b2324633c803f07828968dc9b2b10.m3u8
+#EXTINF:-1 tvg-id="食神1" group-title="chowmovie",食神1
+https://vod3.cf.dmcdn.net/sec2(1W8Q6029EDCQ5tLv7Ya2lXmMebLVOwqoqf75xm1o_Ww3aVDUGh9kYhlAr2J5aPtF_9MrzHA2vHJRf6Zg-SoHDt1GkGKLz5ZBHiH8q_sVzdqWzE__iWDwRjvLfIW_tE_odEzlfHbbw6FzPBs_9RxBoks7TjQi6hXWhnSAv8msaOI)/video/234/140/422041432_mp4_h264_aac_hq.m3u8
+#EXTINF:-1 tvg-id="食神2" group-title="chowmovie",食神2
+https://vod3.cf.dmcdn.net/sec2(O7pcLML7T89-MPGjk6QZ3hkZ8mjsdOvY3xqbw4F0YJnFYQHKkxXFFhwjzzb5gp7s-9k950ijh47n2PPtKRK7qSzLnu946wbYCRG15Gf96jbpJmEJjzsXl1st2TrMy6kos-Vo_mtSb6KpzHs0m_DMQY9aMLGYLve_Zl-Yzj7k8u4)/video/763/471/422174367_mp4_h264_aac_hq.m3u8
+#EXTINF:-1 tvg-id="逃学1" group-title="chowmovie",逃学1
+https://p.okokserver.com/link/f_hhu_63f97d4e1f3843dac06765a49d1ae751.m3u8
+#EXTINF:-1 tvg-id="逃学2" group-title="chowmovie",逃学2
+https://p.okokserver.com/link/f_hhu_2685e1c9ff372f2771144a31757654f8.m3u8
+#EXTINF:-1 tvg-id="逃学3" group-title="chowmovie",逃学3
+https://p.okokserver.com/link/4af1cb5b090a48bda47fa32fafc3c7ef.m3u8
+#EXTINF:-1 tvg-id="西游记1" group-title="chowmovie",西游记1
+https://vod3.cf.dmcdn.net/sec2(4DH3KSINTbHLSUnEEBw2_bKojM_G0id7pABXKklnhMrmLWDhX6FmUZ5cb2crEunPeHNArvjUDE2KpJq5RQqUM3w3YuTwynB75s46lDnsIeKwlAA2N0eQiflkETRnyNSEzUICHKgu1dEklvap3wFDGN-3TpdHHyiHJ8WVn0xQspY)/video/763/726/419627367_mp4_h264_aac_hd.m3u8
+
+
 
 #EXTINF:-1 tvg-id="8TV.my@SD" group-title="Malaysia",8TV
 http://cdn6.163189.xyz/163189/8tv
