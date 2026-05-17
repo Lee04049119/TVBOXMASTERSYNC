@@ -98,6 +98,16 @@ https://svs.itworkscdn.net/smcwatarlive/smcwatar/playlist.m3u8
 
 #EXTINF:-1 tvg-id="功夫" group-title="chowmovie",功夫
 https://p.okokserver.com/link/f_hhu_0e7b2324633c803f07828968dc9b2b10.m3u8
+#EXTINF:-1 tvg-id="食神" group-title="chowmovie",食神
+https://p.okokserver.com/link/f_hhu_2e5edbdc843d27e51e5178f8dc95ff62.m3u8
+#EXTINF:-1 tvg-id="逃学1" group-title="chowmovie",逃学1
+https://p.okokserver.com/link/f_hhu_63f97d4e1f3843dac06765a49d1ae751.m3u8
+#EXTINF:-1 tvg-id="逃学2" group-title="chowmovie",逃学2
+https://p.okokserver.com/link/f_hhu_2685e1c9ff372f2771144a31757654f8.m3u8
+#EXTINF:-1 tvg-id="逃学3" group-title="chowmovie",逃学3
+https://p.okokserver.com/link/4af1cb5b090a48bda47fa32fafc3c7ef.m3u8
+
+
 
 
 #EXTINF:-1 tvg-id="8TV.my@SD" group-title="Malaysia",8TV
