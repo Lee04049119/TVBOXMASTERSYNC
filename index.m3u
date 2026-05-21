@@ -3,11 +3,7 @@
 #EXTINF:-1 tvg-id="8TV.my" tvg-name="8TV"  group-title="8TV",8TV
 #EXTVLCOPT:http-user-agent=Mozilla/5.0
 #EXTVLCOPT:http-referrer=https://watch.tonton.com.my/
-<<<<<<< HEAD
-https://live-ssar-02.tonton.com.my/1779111610/1ab08dd70491834029f21cfd187fd6e88832b09f2002700e9b219cd7f2a7aa6a/8tv/04.m3u8?bpkio_serviceid=6c0958d82a830a025a6fffaf4c033deb&bpkio_sessionid=10a3d233f177-8f092b67-1cfb-4e99-ba21-526a469e908f&category=all&did=5b86dccf-4ea0-f2e5-e170-43a1176f6cce&dnt=0&ifatype=sessionid&lot_auds&mm_sp&plt=web&ttd_uid2=A4AAADYIy1Y5nrszqNthb810AEIcBavNapQ9FDMEakl3XKC3vdOGVzAwrnrWH4RwRqpGruVqUkJqHkj5fmfBuAAM8iP3znXflbNvVHU5fELf-MWpfcA8QJjyEt2YnUDAjp16T0rlrVO6cN9t9Wi047txxEado6ql8JoTfdTxNLSGvlE5RNqpGiiw6BjiQIa2uEyvPVx4qiuhp_kDAAkZ4IgpHQ
-=======
-https://live-ssar-02.tonton.com.my/1779025189/1c6cf4a0e2a4eef7c695e40d5925e4807a8396f26512c8271fcb6080d1349902/8tv/02.m3u8?bpkio_serviceid=6c0958d82a830a025a6fffaf4c033deb&bpkio_sessionid=10a3a128a129-31aec0b9-9345-4f4e-9ab9-1b444f8ef752&category=all&did=f6148ee1-9fed-4161-51b5-7333308a9020&dnt=0&ifatype=sessionid&lot_auds&mm_sp&plt=web&ttd_uid2=A4AAADYIy1Y5nrszqNthb810AEIcBavNapQ9FDMEakl3XKC3vdOGVzAwrnrWH4RwRqpGruVqUkJqHkj5fmfBuAAM8iP3znXflbNvVHU5fELf-MWpfcA8QJjyEt2YnUDAjp16T0rlrVO6cN9t9Wi047txxEado6ql8JoTfdTxNLSGvlE5RNqpGiiw6BjiQIa2uEyvPVx4qiuhp_kDAAkZ4IgpHQ
->>>>>>> 4833b22708636c08797af471063c66b3f4c7da9c
+https://live-ssar-02.tonton.com.my/1779369029/9c5cab99a55d43bd39b5d843dec32b7fb1a599c641259c9a7e3ead6143e86355/8tv/02.m3u8?bpkio_serviceid=6c0958d82a830a025a6fffaf4c033deb&bpkio_sessionid=10d3b129f145-aa11841f-b248-49dc-9557-7771c431ae04&category=all&did=ae218640-06e2-203b-0377-bbaa01c3f02d&dnt=0&ifatype=sessionid&lot_auds&mm_sp&plt=web&ttd_uid2=A4AAADYWvLlsiZmq4JVckGV_Db-Jb23pBe0IOys6eFV023r2lSWfBaF4C-LLILJRIsjYNP2Os1hPn5yzXcQYdBGnkhGBpLo-nGmgRyKAhnFI8YbSNSa3v71ObwJj32y_qyrbOacHGYjhxekx4AIbJ5hSYYkE7RumqhFTgXAwmn4S2drE_d9YR2hJl9YmFVFjVh6W05zehQEtdF8uXmMyyJK2Tw
 
 #EXTINF:-1 tvg-id="AjmanTV.ae@SD" group-title="UAE",Ajman TV (1080p)
 https://cdn1.logichost.in/ajmantv/live/playlist.m3u8
