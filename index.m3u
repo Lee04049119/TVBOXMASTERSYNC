@@ -98,6 +98,12 @@ https://svs.itworkscdn.net/smcwatarlive/smcwatar/playlist.m3u8
 http://41.223.30.230/ZEEAFLAM/index.m3u8
 #EXTINF:-1 tvg-id="ZeeAlwan.ae@SD" group-title="UAE",Zee Alwan (576p)
 http://41.223.30.230/ZEEALWAN/index.m3u8
+#EXTINF:-1 tvg-id="DubaiTVInternational.ae@SD" group-title="UAE",Dubai TV International (1080p)
+http://185.9.2.18/chid_139/index.m3u8
+#EXTINF:-1 tvg-id="Alarabiya.ae@SD" group-title="UAE",Alarabiya (1080p)
+http://185.9.2.18/chid_146/index.m3u8
+#EXTINF:-1 tvg-id="AbuDhabiTV.ae@SD" group-title="UAE",Abu Dhabi TV
+http://185.9.2.18/chid_326/index.m3u8
 
 #EXTINF:-1 tvg-id="功夫" group-title="chowmovie",功夫
 https://p.okokserver.com/link/f_hhu_0e7b2324633c803f07828968dc9b2b10.m3u8
