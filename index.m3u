@@ -5,6 +5,8 @@
 #EXTVLCOPT:http-referrer=https://watch.tonton.com.my/
 https://live-ssar-02.tonton.com.my/1779534220/56d50575d8d47091b50d1950df549e693dd37ebafc3e36ec209e95e60af93f80/8tv/04.m3u8?bpkio_serviceid=6c0958d82a830a025a6fffaf4c033deb&bpkio_sessionid=10e3c202d81-72cd02a8-d3cb-4575-ab11-5b9bf55c5d0a&category=all&did=43b07d34-508d-ecaf-657b-b0fe9b05e730&dnt=0&ifatype=sessionid&lot_auds&mm_sp&plt=web&ttd_uid2=A4AAADYyRrmOKEDC9nPOk8OUzR3b8g8eEKNGRGQtkkz1zxbWXkXU6oe3UL-AYOffeLtTyIHvZfhis6x4TcG8u1ByQhsGjCGAQsfQ1vMttEvbhFV4PTySw8yVAxX8PrCJHHncrmpUhaJw5VdW1GFcUBNLabDJk71r3g2iEGre4emr_bTPSKXdb-GfqZLlDVWbRzGu_MAER6mf8-_09daJ8XvAdA
 
+#EXTINF:-1 tvg-id="AbuDhabiTV.ae@SD" group-title="UAE",Abu Dhabi TV
+http://185.9.2.18/chid_326/index.m3u8
 #EXTINF:-1 tvg-id="AjmanTV.ae@SD" group-title="UAE",Ajman TV (1080p)
 https://cdn1.logichost.in/ajmantv/live/playlist.m3u8
 #EXTINF:-1 tvg-id="Alarabiya.ae@SD" group-title="UAE",Al Arabiya (1080p)
@@ -24,11 +26,15 @@ https://svs.itworkscdn.net/alwoustalive/alwoustatv.smil/playlist.m3u8
 #EXTINF:-1 tvg-id="AlYaumTV.ae@SD" group-title="UAE",Al Yaum TV (1080p)
 https://hlspackager.akamaized.net/live/DB/ALYAUM_TV/HLS/ALYAUM_TV.m3u8
 #EXTINF:-1 tvg-id="Alarabiya.ae@SD" group-title="UAE",Alarabiya (1080p)
+http://185.9.2.18/chid_146/index.m3u8
+#EXTINF:-1 tvg-id="Alarabiya.ae@SD" group-title="UAE",Alarabiya (1080p)
 https://live.alarabiya.net/alarabiapublish/alarabiya.smil/alarabiapublish/alarabiya_1080p/chunks.m3u8
 #EXTINF:-1 tvg-id="Alarabiya.ae@SD" group-title="UAE",Alarabiya (1080p)
 https://shd-gcp-live.edgenextcdn.net/live/bitmovin-alarabiya/7f90de73d777d04f3dada92f90d35c44/index.m3u8
 #EXTINF:-1 tvg-id="CNBCArabiya.ae@SD" group-title="UAE",CNBC Arabiya (1080p)
 https://cnbc-live.akamaized.net/cnbc/master.m3u8
+#EXTINF:-1 tvg-id="DubaiTVInternational.ae@SD" group-title="UAE",Dubai TV International (1080p)
+http://185.9.2.18/chid_139/index.m3u8
 #EXTINF:-1 tvg-id="FujairahTV.ae@SD" group-title="UAE",Fujairah TV (720p)
 https://live.kwikmotion.com/fujairahlive/fujairah.smil/playlist.m3u8
 #EXTINF:-1 tvg-id="MBC1.ae@SD" group-title="UAE",MBC 1 (1080p)
@@ -57,6 +63,8 @@ https://cdn.bestream.io:19360/elfaro4/elfaro4.m3u8
 http://116.90.120.151:8000/play/a0ax/index.m3u8
 #EXTINF:-1 tvg-id="PeaceTVBangla.ae@SD" group-title="UAE",Peace TV Bangla (1080p)
 https://dzkyvlfyge.erbvr.com/PeaceTvBangla/index.m3u8
+#EXTINF:-1 tvg-id="PeaceTVBangla.ae@SD" group-title="UAE",Peace TV Bangla (720p)
+https://trs1.aynaott.com/PeaceTvBanglaHD/index.m3u8
 #EXTINF:-1 tvg-id="PeaceTVChinese.ae@SD" group-title="UAE",Peace TV Chinese (1080p)
 https://dzkyvlfyge.erbvr.com/PeaceTvChinese/index.m3u8
 #EXTINF:-1 tvg-id="PeaceTVEnglish.ae@SD" group-title="UAE",Peace TV English (1080p)
@@ -89,22 +97,14 @@ https://stream.skynewsarabia.com/hls/sna.m3u8
 https://stream.skynewsarabia.com/vertical/vertical.m3u8
 #EXTINF:-1 tvg-id="SkyNewsArabiaVertical.ae@HD" group-title="UAE",Sky News Arabia Vertical (1080p)
 https://live-stream.skynewsarabia.com/c-vertical-channel/vertical-stream/index.m3u8
+#EXTINF:-1 tvg-id="SpacetoonArabic.ae@SD" group-title="UAE",Spacetoon Arabic (576p)
+https://live-uae-next.spacetoongo.com/ST_MENA_NEXT/hls/r9p2hjipmw2kl.m3u8
 #EXTINF:-1 tvg-id="WatarRadio.ae@SD" group-title="UAE",Watar Radio (1080p)
 https://svs.itworkscdn.net/smcwatarlive/smcwatar/playlist.m3u8
 #EXTINF:-1 tvg-id="ZeeAflam.ae@SD" group-title="UAE",Zee Aflam (720p)
 http://41.223.30.230/ZEEAFLAM/index.m3u8
 #EXTINF:-1 tvg-id="ZeeAlwan.ae@SD" group-title="UAE",Zee Alwan (576p)
 http://41.223.30.230/ZEEALWAN/index.m3u8
-#EXTINF:-1 tvg-id="DubaiTVInternational.ae@SD" group-title="UAE",Dubai TV International (1080p)
-http://185.9.2.18/chid_139/index.m3u8
-#EXTINF:-1 tvg-id="Alarabiya.ae@SD" group-title="UAE",Alarabiya (1080p)
-http://185.9.2.18/chid_146/index.m3u8
-#EXTINF:-1 tvg-id="AbuDhabiTV.ae@SD" group-title="UAE",Abu Dhabi TV
-http://185.9.2.18/chid_326/index.m3u8
-#EXTINF:-1 tvg-id="PeaceTVBangla.ae@SD" group-title="UAE",Peace TV Bangla (720p)
-https://trs1.aynaott.com/PeaceTvBanglaHD/index.m3u8
-#EXTINF:-1 tvg-id="SpacetoonArabic.ae@SD" group-title="UAE",Spacetoon Arabic (576p)
-https://live-uae-next.spacetoongo.com/ST_MENA_NEXT/hls/r9p2hjipmw2kl.m3u8
 
 #EXTINF:-1 tvg-id="功夫" group-title="chowmovie",功夫
 https://p.okokserver.com/link/f_hhu_0e7b2324633c803f07828968dc9b2b10.m3u8
@@ -170,6 +170,8 @@ https://live.mana2.my/Tv2/index.m3u8?auth_key=1745177833-e4f0090e3d3b4ed1b2b4f5d
 #EXTINF:-1 tvg-id="TV2.my@SD" group-title="Malaysia",TV2 [Geo-blocked]
 #EXTVLCOPT:http-referrer=https://rtm-player.glueapi.io/
 https://d25tgymtnqzu8s.cloudfront.net/smil:tv2/playlist.m3u8?id=2
+#EXTINF:-1 tvg-id="TV3.my@SD" group-title="Malaysia",TV3 (576p)
+https://m3u.chanox97.workers.dev/tv3.m3u8
 #EXTINF:-1 tvg-id="TV6.my@SD" group-title="Malaysia",TV6 [Geo-blocked]
 #EXTVLCOPT:http-referrer=https://rtm-player.glueapi.io/
 https://d25tgymtnqzu8s.cloudfront.net/smil:tv6/playlist.m3u8?id=6
@@ -179,8 +181,6 @@ https://tonton-live-switch-ssar.akamaized.net/stream-tv9/master.m3u8?bpkio_servi
 https://live.mana2.my/TvIkim/index.m3u8?auth_key=1745177920-648b7df03f404bc4ac20e90e96f817eb-0-35d3be6e85a129ce175b39a9819ca942&token=1745177920-648b7df03f404bc4ac20e90e96f817eb-0-35d3be6e85a129ce175b39a9819ca942
 #EXTINF:-1 tvg-id="TVIKIM.my@SD" group-title="Malaysia",TVIKIM
 https://edge-sg1.vediostream.com/abr/tvikim/playlist.m3u8
-#EXTINF:-1 tvg-id="TV3.my@SD" group-title="Malaysia",TV3 (576p)
-https://m3u.chanox97.workers.dev/tv3.m3u8
 
 #EXTINF:-1 tvg-id="NTV7.my" tvg-name="NTV7"  group-title="ntv7",NTV7
 #EXTVLCOPT:http-user-agent=Mozilla/5.0
