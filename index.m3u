@@ -178,6 +178,8 @@ https://radiomy-tonton-proxy.api-danidev.workers.dev/tonton/live/6420326
 #EXTINF:-1 tvg-id="DramaSangat.my@SD" group-title="Malaysia",Drama Sangat (1080p) [Geo-blocked]
 #EXTVLCOPT:http-referrer=https://radiomy-tonton-proxy.api-danidev.workers.dev/tonton/live/6420342
 https://radiomy-tonton-proxy.api-danidev.workers.dev/tonton/live/6420342
+#EXTINF:-1 tvg-id="TVS.my@SD" group-title="Malaysia",TVS (1080p) [Geo-blocked]
+https://api.dani-dev.co.za/v1/stream/mytv/live/tvs
 
 #EXTINF:-1 tvg-id="NTV7.my" tvg-name="NTV7"  group-title="ntv7",NTV7
 #EXTVLCOPT:http-user-agent=Mozilla/5.0
